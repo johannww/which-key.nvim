@@ -28,7 +28,9 @@ function M:add(keymap, virtual)
   end
   local keys = Util.keys(keymap.lhs, { norm = true })
   local node = assert(self.root:find(keys, { create = true }))
-  node.plugin = node.plugin or keymap.plugin
+  local proxy_key = keymap.proxy and Util.keys(keymap.proxy, { norm = true }) or ""
+  local proxy_node = self.root:find(proxy_key) or Node.new()
+  node.plugin = node.plugin or keymap.plugin or proxy_node.plugin
   if virtual then
     ---@cast node wk.Node
     if node.mapping and not keymap.preset and not node.mapping.preset then
