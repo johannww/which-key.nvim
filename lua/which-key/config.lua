@@ -182,6 +182,9 @@ M.loaded = false
 ---@type wk.Keymap[]
 M.mappings = {}
 
+---@type wk.Keymap[]
+M.proxies = {}
+
 ---@type wk.Opts
 M.options = nil
 
@@ -289,6 +292,9 @@ function M.setup(opts)
     -- finally, add the mapppings from the config
     M.add(M.options.spec)
 
+    -- Save proxies
+    M.addProxies()
+
     -- setup colors and start which-key
     require("which-key.colors").setup()
     require("which-key.state").setup()
@@ -330,6 +336,14 @@ function M.add(mappings, opts)
   end
   if M.loaded then
     require("which-key.buf").clear()
+  end
+end
+
+function M.addProxies()
+  for _, km in ipairs(M.mappings) do
+    if km.proxy then
+      table.insert(M.proxies, km)
+    end
   end
 end
 

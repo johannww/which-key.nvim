@@ -56,8 +56,15 @@ function M.setup()
     callback = function(ev)
       Util.debug(ev.event)
       if ev.event == "RecordingEnter" then
+        for _, map in pairs(Config.proxies) do
+          vim.keymap.set(map.mode, map.lhs, map.proxy)
+        end
         Buf.clear({ buf = ev.buf })
         M.stop()
+      else
+        for _, map in pairs(Config.proxies) do
+          vim.keymap.del(map.mode, map.lhs)
+        end
       end
     end,
   })
